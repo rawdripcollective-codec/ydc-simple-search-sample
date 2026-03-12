@@ -41,8 +41,8 @@ export default function Home() {
       });
 
       if (!res.ok) {
-        const data = await res.json();
-        setError(data.error || "Search failed");
+        const data = await res.json().catch(() => null);
+        setError(data?.error || "Search failed");
         setStatus("idle");
         return;
       }
@@ -114,21 +114,26 @@ export default function Home() {
           </p>
 
           {/* Search input */}
-          <div className="flex gap-3">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSubmit();
+            }}
+            className="flex gap-3"
+          >
             <div className="flex flex-1 items-center rounded-full border border-[#e7e8ec] px-5 py-3 transition-colors focus-within:border-[#101012]">
               <input
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
                 disabled={status === "loading"}
                 placeholder="Search the web..."
+                aria-label="Search query"
                 className="flex-1 bg-transparent text-[16px] leading-6 text-[#101012] placeholder:text-[#81828c] focus:outline-none disabled:opacity-40"
               />
             </div>
             <button
-              type="button"
-              onClick={handleSubmit}
+              type="submit"
               disabled={!query.trim() || status === "loading"}
               className={[
                 "h-[50px] shrink-0 rounded-full px-5 text-[16px] font-semibold leading-5 transition-colors",
@@ -139,7 +144,7 @@ export default function Home() {
             >
               {status === "loading" ? "Searching..." : "Search"}
             </button>
-          </div>
+          </form>
 
           {/* Error */}
           {error && (
@@ -151,14 +156,22 @@ export default function Home() {
             <>
               <p className="text-[13px] leading-5 text-[#81828c]">
                 {results.length} result{results.length !== 1 && "s"}
-                {latency != null && ` in ${latency}ms`}
+                {latency != null &&
+                  ` in ${Math.round(latency * 1000)}ms`}
               </p>
+
+              {results.length === 0 && (
+                <p className="text-[14px] leading-5 text-[#81828c]">
+                  No results found. Try a different query.
+                </p>
+              )}
 
               <div className="flex flex-col gap-5">
                 {results.map((r, i) => (
-                  <div key={i} className="flex flex-col gap-1">
+                  <div key={r.url ?? i} className="flex flex-col gap-1">
                     <div className="flex items-center gap-2">
                       {r.faviconUrl && (
+                        /* eslint-disable-next-line @next/next/no-img-element */
                         <img
                           src={r.faviconUrl}
                           alt=""
@@ -205,13 +218,13 @@ export default function Home() {
           {[
             {
               label: "Project code",
-              href: "https://github.com/youdotcom-oss",
+              href: "https://github.com/youdotcom-oss/ydc-simple-search-sample",
             },
             {
               label: "More demos",
               href: "https://docs.you.com/integrations/overview",
             },
-            { label: "Docs", href: "https://documentation.you.com/" },
+            { label: "Docs", href: "https://docs.you.com" },
             {
               label: "Discord",
               href: "https://discord.com/invite/youdotcom/",

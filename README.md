@@ -1,6 +1,6 @@
 # Simple Search
 
-The simplest possible example of the [You.com Search API](https://documentation.you.com). Pass a query, get back web results. That's it.
+The simplest possible example of the [You.com Search API](https://docs.you.com). Pass a query, get back web results. That's it.
 
 Two ways to run it: a Python script for the command line, or a Next.js web app you can deploy to Vercel.
 
@@ -34,18 +34,21 @@ What is RAG? - Retrieval-Augmented Generation AI Explained - AWS
 
 ## Web app
 
+Set up your API key first:
+
+```bash
+cp .env.example .env.local
+# edit .env.local with your actual API key
+```
+
+Then install and run:
+
 ```bash
 npm install
 npm run dev
 ```
 
 Open [localhost:3000](http://localhost:3000), type a query, and see the results. The app calls the Search API server-side so your API key stays safe.
-
-Set `YDC_API_KEY` in `.env.local`:
-
-```
-YDC_API_KEY=your-api-key-here
-```
 
 ### Deploy to Vercel
 
@@ -68,7 +71,7 @@ The web app adds a UI on top: search input, result cards with favicons, and You.
 
 ## Links
 
-- [You.com API docs](https://documentation.you.com)
+- [You.com API docs](https://docs.you.com)
 - [Python SDK on PyPI](https://pypi.org/project/youdotcom/)
 - [TypeScript SDK on npm](https://www.npmjs.com/package/@youdotcom-oss/sdk)
 - [Get an API key](https://you.com/platform)

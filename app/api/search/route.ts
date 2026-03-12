@@ -2,7 +2,12 @@ import { You } from "@youdotcom-oss/sdk";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
-  const { query } = await request.json();
+  let query: unknown;
+  try {
+    ({ query } = await request.json());
+  } catch {
+    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+  }
 
   if (!query || typeof query !== "string") {
     return NextResponse.json({ error: "query is required" }, { status: 400 });

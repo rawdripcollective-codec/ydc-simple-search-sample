@@ -25,8 +25,16 @@ export default function Home() {
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState("");
 
-  async function handleSubmit() {
-    if (!query.trim()) return;
+  const exampleQueries = [
+    "latest AI research",
+    "best programming languages 2026",
+    "how does RAG work",
+    "next.js vs remix",
+  ];
+
+  async function handleSubmit(searchQuery?: string) {
+    const q = searchQuery ?? query;
+    if (!q.trim()) return;
 
     setStatus("loading");
     setError("");
@@ -37,7 +45,7 @@ export default function Home() {
       const res = await fetch("/api/search", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query }),
+        body: JSON.stringify({ query: q }),
       });
 
       if (!res.ok) {
@@ -113,6 +121,26 @@ export default function Home() {
             descriptions.
           </p>
 
+          {/* Code snippet */}
+          <div className="rounded-xl border border-[#e7e8ec] bg-[#f9f9fb] px-5 py-4">
+            <pre className="font-mono text-[13px] leading-5 text-[#4a4b57]">
+              <code>{`const you = new You({ apiKeyAuth: "ydc-..." });
+const { results } = await you.search({ query: "your query" });
+console.log(results.web);`}</code>
+            </pre>
+            <p className="mt-3 text-[12px] leading-4 text-[#81828c]">
+              Powered by the{" "}
+              <a
+                href="https://docs.you.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline transition-colors hover:text-[#101012]"
+              >
+                You.com Search API
+              </a>
+            </p>
+          </div>
+
           {/* Search input */}
           <form
             onSubmit={(e) => {
@@ -145,6 +173,25 @@ export default function Home() {
               {status === "loading" ? "Searching..." : "Search"}
             </button>
           </form>
+
+          {/* Example queries */}
+          {status === "idle" && !error && (
+            <div className="flex flex-wrap gap-2">
+              {exampleQueries.map((eq) => (
+                <button
+                  key={eq}
+                  type="button"
+                  onClick={() => {
+                    setQuery(eq);
+                    handleSubmit(eq);
+                  }}
+                  className="rounded-full border border-[#e7e8ec] px-3 py-1.5 text-[13px] leading-4 text-[#4a4b57] transition-colors hover:border-[#101012] hover:text-[#101012]"
+                >
+                  {eq}
+                </button>
+              ))}
+            </div>
+          )}
 
           {/* Error */}
           {error && (

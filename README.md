@@ -1,5 +1,7 @@
 # Simple Search
 
+**[Live demo →](https://ydc-simple-search-sample.vercel.app/)**
+
 The simplest possible example of the [You.com Search API](https://docs.you.com). Pass a query, get back web results. That's it.
 
 Two ways to run it: a Python script for the command line, or a Next.js web app you can deploy to Vercel.

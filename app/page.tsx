@@ -123,7 +123,7 @@ export default function Home() {
 
           {/* Code snippet */}
           <div className="rounded-xl border border-[#e7e8ec] bg-[#f9f9fb] px-5 py-4">
-            <pre className="font-mono text-[13px] leading-5 text-[#4a4b57]">
+            <pre className="overflow-x-auto font-mono text-[13px] leading-5 text-[#4a4b57]">
               <code>{`const you = new You({ apiKeyAuth: "ydc-..." });
 const { results } = await you.search({ query: "your query" });
 console.log(results.web);`}</code>

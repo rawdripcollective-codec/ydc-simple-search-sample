@@ -16,8 +16,15 @@ export async function POST(request: Request) {
     );
   }
 
-  const you = new You({ apiKeyAuth: apiKey });
-  const response = await you.search({ query, count: 10 });
-
-  return NextResponse.json(response);
+  try {
+    const you = new You({ apiKeyAuth: apiKey });
+    const response = await you.search({ query, count: 10 });
+    return NextResponse.json(response);
+  } catch (err) {
+    console.error("Search API error:", err);
+    return NextResponse.json(
+      { error: err instanceof Error ? err.message : "Search failed" },
+      { status: 502 },
+    );
+  }
 }

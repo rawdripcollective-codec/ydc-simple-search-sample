@@ -19,6 +19,8 @@ type SearchResponse = {
 type Status = "idle" | "loading" | "done";
 
 export default function Home() {
+  const [apiKey, setApiKey] = useState("");
+  const [showApiKey, setShowApiKey] = useState(false);
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<WebResult[]>([]);
   const [latency, setLatency] = useState<number | null>(null);
@@ -45,7 +47,7 @@ export default function Home() {
       const res = await fetch("/api/search", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query: q }),
+        body: JSON.stringify({ query: q, apiKey: apiKey.trim() || undefined }),
       });
 
       if (!res.ok) {
@@ -141,6 +143,38 @@ console.log(results.web);`}</code>
             </p>
           </div>
 
+          {/* API key input */}
+          <div className="flex flex-col gap-2">
+            <div className="flex h-[50px] items-center rounded-full border border-[#e7e8ec] px-5 shadow-sm transition-colors focus-within:border-[#101012]">
+              <input
+                type={showApiKey ? "text" : "password"}
+                value={apiKey}
+                onChange={(e) => setApiKey(e.target.value)}
+                placeholder="Enter your You.com API key"
+                aria-label="API key"
+                className="flex-1 bg-transparent text-[16px] leading-6 text-[#101012] placeholder:text-[#81828c] focus:outline-none"
+              />
+              <button
+                type="button"
+                onClick={() => setShowApiKey(!showApiKey)}
+                className="ml-2 text-[13px] font-medium text-[#81828c] transition-colors hover:text-[#101012]"
+              >
+                {showApiKey ? "Hide" : "Show"}
+              </button>
+            </div>
+            <p className="text-[12px] leading-4 text-[#81828c]">
+              A unique API Key is required to use this demo.{" "}
+              <a
+                href="https://you.com/platform"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline transition-colors hover:text-[#101012]"
+              >
+                Get your API Key with free credits.
+              </a>
+            </p>
+          </div>
+
           {/* Search input */}
           <form
             onSubmit={(e) => {
@@ -162,10 +196,10 @@ console.log(results.web);`}</code>
             </div>
             <button
               type="submit"
-              disabled={!query.trim() || status === "loading"}
+              disabled={!query.trim() || !apiKey.trim() || status === "loading"}
               className={[
                 "h-[50px] shrink-0 rounded-full px-5 text-[16px] font-semibold leading-5 transition-colors",
-                query.trim() && status !== "loading"
+                query.trim() && apiKey.trim() && status !== "loading"
                   ? "bg-[#101012] text-white hover:bg-[#2d2d30]"
                   : "cursor-default bg-[#f9f9fb] text-[#cdced6]",
               ].join(" ")}

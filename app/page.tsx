@@ -18,6 +18,8 @@ type SearchResponse = {
 
 type Status = "idle" | "loading" | "done";
 
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+
 export default function Home() {
   const [apiKey, setApiKey] = useState("");
   const [showApiKey, setShowApiKey] = useState(false);
@@ -44,7 +46,7 @@ export default function Home() {
     setLatency(null);
 
     try {
-      const res = await fetch("/api/search", {
+      const res = await fetch(`${basePath}/api/search`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query: q, apiKey: apiKey.trim() || undefined }),

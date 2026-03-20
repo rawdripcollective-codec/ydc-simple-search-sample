@@ -15,14 +15,13 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "query is required" }, { status: 400 });
   }
 
-  const apiKey =
-    (typeof clientApiKey === "string" && clientApiKey) || process.env.YDC_API_KEY;
-  if (!apiKey) {
+  if (typeof clientApiKey !== "string" || !clientApiKey) {
     return NextResponse.json(
-      { error: "An API key is required. Enter one above or set YDC_API_KEY." },
+      { error: "An API key is required." },
       { status: 401 },
     );
   }
+  const apiKey = clientApiKey;
 
   try {
     const you = new You({ apiKeyAuth: apiKey });

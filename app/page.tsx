@@ -18,9 +18,9 @@ type SearchResponse = {
 
 type Status = "idle" | "loading" | "done";
 
-export default function Home() {
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
+export default function Home() {
   const [apiKey, setApiKey] = useState("");
   const [showApiKey, setShowApiKey] = useState(false);
   const [query, setQuery] = useState("");

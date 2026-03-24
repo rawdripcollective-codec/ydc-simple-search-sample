@@ -1,6 +1,6 @@
 # Simple Search
 
-**[Live demo →](https://ydc-simple-search-sample.vercel.app/)**
+**[Live demo →](https://you.com/examples/search)**
 
 The simplest possible example of the [You.com Search API](https://docs.you.com). Pass a query, get back web results. That's it.
 
